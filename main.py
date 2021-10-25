@@ -18,6 +18,8 @@ mpDraw = mp.solutions.drawing_utils
 lower = np.array([110, 155, 20])
 upper = np.array([130, 255, 255])
 
+length_list = []
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -64,11 +66,14 @@ while True:
         cv.line(img, (x1, y1), (x2, y2), (200, 30, 100), 2)
 
         length = math.hypot(x2 - x1, y2 - y1)
-
         if length < 40:
             cv.putText(img, "Playing", (20, 30), cv.FONT_HERSHEY_PLAIN, 2, (60, 100, 190), 2)
+
+        if length < 40 and length_list[-1] > 40:
             c_sound.play()
+
         print(length)
+        length_list.append(length)
         cv.imshow('cam', img)
         cv.imshow('mask', mask)
         cv.waitKey(1)
