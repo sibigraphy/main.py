@@ -10,6 +10,7 @@ pygame.display.set_mode((200, 100))
 c_sound = pygame.mixer.Sound('piano C.wav')
 
 cap = cv.VideoCapture('top view detailed.mp4')
+# cap = cv.VideoCapture(0)
 
 mpHands = mp.solutions.hands
 hands = mpHands.Hands()
@@ -68,9 +69,11 @@ while True:
         length = math.hypot(x2 - x1, y2 - y1)
         if length < 40:
             cv.putText(img, "Playing", (20, 30), cv.FONT_HERSHEY_PLAIN, 2, (60, 100, 190), 2)
-
-        if length < 40 and length_list[-1] > 40:
-            c_sound.play()
+        try:
+            if length < 40 and length_list[-1] > 40:
+                c_sound.play()
+        except IndexError:
+            pass
 
         print(length)
         length_list.append(length)
