@@ -35,11 +35,11 @@ while True:
         indexpoints = []
         if results.multi_hand_landmarks:
             for handLms in results.multi_hand_landmarks:
-                for id, lm in enumerate(handLms.landmark):
+                for id_, lm in enumerate(handLms.landmark):
                     # print(id, lm)
                     h, w, c = img.shape
                     cx, cy = int(lm.x * w), int(lm.y * h)
-                    if id == 8:
+                    if id_ == 8:
                         indexpoints.append((cx, cy))
                     # else:
                     #     indexpoints.append((0, 0))
