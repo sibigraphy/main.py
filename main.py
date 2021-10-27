@@ -9,13 +9,15 @@ import sys
 
 
 
-def auto_piano(filename, keycolor_lower= (110, 155, 20), keycolor_upper = (130, 255, 255)):
+def auto_piano(filename, keycolor_lower= (110, 155, 20), keycolor_upper = (130, 255, 255), webcam_no=None):
     pygame.init()
     pygame.display.set_mode((200, 100))
     c_sound = pygame.mixer.Sound('piano C.wav')
+    if webcam_no is not None:
+        cap = cv.VideoCapture(int(webcam_no))
+    else:
+        cap = cv.VideoCapture(str(filename))
 
-    cap = cv.VideoCapture(str(filename))
-    # cap = cv.VideoCapture(0)
 
 
     mpHands = mp.solutions.hands
@@ -88,7 +90,7 @@ def auto_piano(filename, keycolor_lower= (110, 155, 20), keycolor_upper = (130, 
             cv.waitKey(1)
 
 def image_div(filename, divisions= 8):
-    notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C']
+    notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
     lower = np.array([170, 155, 20])
     upper = np.array([180, 255, 255])
     img = cv.imread(str(filename))
@@ -104,9 +106,9 @@ def image_div(filename, divisions= 8):
         for i in range(1, divisions + 1):
             cv.circle(img, (x + divs * i - divs//2, y + 10), 5, (20, 200, 255), cv.FILLED)
             cv.line(img, (x + divs * i, y + 2), (x + divs * i, y + h - 2), (0, 0, 0), thickness= 2)
-            cv.putText(img, notes[i - 1], (x + divs * i - divs//2 - 10, y + h//2 + 10), cv.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
-    cv.imshow('grey_rec', img)
+            current_keyboard = i // (len(notes))
+            ind = i - (len(notes) * current_keyboard) - 1
+            cv.putText(img, notes[ind], (x + divs * i - divs//2 - 10, y + h//2 + 10), cv.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
+
+    cv.imshow('div_piano', img)
     cv.waitKey(0)
-
-
-image_div('red rec.png', 8)
